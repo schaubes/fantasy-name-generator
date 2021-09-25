@@ -1,0 +1,25 @@
+@use 'reset'
+@use 'vars'
+
+button, .btn, input
+  margin: 0.125rem 0.25rem
+  padding: 0.25rem 0.5rem
+  border: thin solid #BBBBBB
+  border-radius: 0.25rem
+  background: #CCCCCC
+  
+  &:first-of-type
+    margin-left: 0
+  &:last-of-type
+    margin-right: 0
+input
+  width: 100%
+  &:hover
+    background: #DDDDDD
+  &:focus, &:active
+    background: #FFFFFF
+button, .btn
+  &:focus, &:hover
+    background: #DDDDDD
+  &:active
+    background: #FFFFFF
