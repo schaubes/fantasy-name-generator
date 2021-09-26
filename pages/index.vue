@@ -76,6 +76,8 @@
 <script>
 import Vue from 'vue';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export default Vue.extend({
   head: {
     script: [
@@ -118,7 +120,7 @@ export default Vue.extend({
       race: {
         human: {
           name: 'human',
-          model: 'yob1900',
+          model: 'human',
           gender: {
             male: 'male',
             female: 'female',
@@ -128,14 +130,17 @@ export default Vue.extend({
     }
   },
   mounted () {
+    console.log('isDev', isDev);
     this.copyConfig('init', 'state');
+    this.loadModel('human', 'female');
     //console.log('ml5 version:', ml5.version);
-    this.loadModel('yob1900f');
   },
   methods: {
-    loadModel (model) {
+    loadModel (race, gender) {
       this.status = 1;
-      this.rnn = ml5.charRNN('/models/' + model, () => {
+      let model = race + '/' + gender;
+      let model_path = isDev ? '/models/' + model : 'https://raw.githubusercontent.com/schaubes/fantasy-name-generator/main/models/' + model;
+      this.rnn = ml5.charRNN(model_path, () => {
         console.log('model \'' + model + '\' loaded');
         this.status = 0;
       });
