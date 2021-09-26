@@ -1,4 +1,4 @@
-# fantasy name generator
+# Fantasy Name Generator
 
 ## Build Setup
 
