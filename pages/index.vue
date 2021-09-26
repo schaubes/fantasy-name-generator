@@ -69,7 +69,7 @@ import Vue from 'vue';
 export default Vue.extend({
   head: {
     script: [
-      { src: 'https://unpkg.com/ml5@latest/dist/ml5.min.js' },
+      { src: 'https://unpkg.com/ml5@0.6.1/dist/ml5.min.js', type: 'text/javascript' },
     ]
   },
   data () {
