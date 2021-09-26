@@ -152,17 +152,38 @@ export default Vue.extend({
       this.output = [];
 
       for (let c = 0; c < this.config.query.cicles; c++) {
-        this.output.push(await this.single());
+        let duplicate_break_count = 0;
+        const duplicate_break_max = 10;
+
+        while (duplicate_break_count < duplicate_break_max) {
+          let output = await this.single();
+
+          if (!this.output.includes(output)) {
+            this.output.push(output);
+            duplicate_break_count = 0;
+            break;
+          }
+
+          duplicate_break_count++;
+        }
       }
 
-      console.log('model generated ' + this.config.query.cicles + ' entries');
+      let output_length = this.output.length;
+      if (output_length < this.config.query.cicles) {
+        //console.log('output: ' + output_length, 'cicles: ' + this.config.query.cicles);
+        for (let i = output_length; i < this.config.query.cicles; i++) {
+          this.output.push('-');
+        }
+      }
+
+      console.log('model generated ' + output_length + ' entries');
       this.status = 0;
     },
     async single () {
       let current = '';
       let output = '';
-      const break_threshold = 10;
-      let break_count = 0;
+      let char_break_count = 0;
+      const char_break_max = 10;
       const feed_length = 1;
       let running = true;
       const chars = 'abcdefghijklmnopqrstuvwxyz';
@@ -183,9 +204,9 @@ export default Vue.extend({
         const next = await this.predict();
 
         if (!chars.includes(next.toLowerCase())) {
-          if (output.length < this.config.query.min_length && break_count < break_threshold) {
+          if (output.length < this.config.query.min_length && char_break_count < char_break_max) {
             await this.rnn.feed(current);
-            break_count++;
+            char_break_count++;
             continue;
           }
 
@@ -195,7 +216,7 @@ export default Vue.extend({
 
         current = next;
         output += next;
-        break_count = 0;
+        char_break_count = 0;
 
         if (output.length >= this.config.query.max_length) {
           running = false;
