@@ -130,7 +130,6 @@ export default Vue.extend({
     }
   },
   mounted () {
-    console.log('isDev', isDev);
     this.copyConfig('init', 'state');
     this.loadModel('human', 'female');
     //console.log('ml5 version:', ml5.version);
@@ -139,7 +138,7 @@ export default Vue.extend({
     loadModel (race, gender) {
       this.status = 1;
       let model = race + '/' + gender;
-      let model_path = isDev ? '/models/' + model : 'https://raw.githubusercontent.com/schaubes/fantasy-name-generator/main/models/' + model;
+      let model_path = isDev ? '/fantasy-name-generator/models/' + model : 'https://raw.githubusercontent.com/schaubes/fantasy-name-generator/main/models/' + model;
       this.rnn = ml5.charRNN(model_path, () => {
         console.log('model \'' + model + '\' loaded');
         this.status = 0;
@@ -348,8 +347,9 @@ export default Vue.extend({
           section#buttons
             padding: 1rem 0
           section#output
-            margin: 1rem 0
+            margin: 0
             .output
+              margin: 1rem 0
               .friendly
                 padding: 1rem
                 color: #B2B2B2
@@ -370,6 +370,7 @@ export default Vue.extend({
                       font-size: 1.25rem
                       font-weight: normal
             .saved
+              margin: 1rem 0
               .friendly
                 padding: 1rem
                 color: #B2B2B2

@@ -8,12 +8,11 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: 'An experimental machine learning fantasy name generator backed with ml5.js' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: '/fantasy-name-generator/favicon.png' },
-      { rel: 'icon', type: 'image/x-icon', href: '/fantasy-name-generator/favicon.ico' }
+      { rel: 'icon', type: 'image/png', href: '/fantasy-name-generator/icon.png' },
     ],
   },
 
