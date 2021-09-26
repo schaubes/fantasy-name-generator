@@ -32,7 +32,8 @@
                   input#inputMinLength(type="number" name="inputMinLength" placeholder="Min Length" min="3" :max="config.state.max_length" step="1" v-model="config.state.min_length")
                   input#inputMaxLength(type="number" name="inputMaxLength" placeholder="Max Length" :min="config.state.min_length" max="15" step="1"  v-model="config.state.max_length")
                 .col-12.col-sm-5.col-info
-                  span [{{ config.state.min_length }}, {{ config.state.max_length }}]
+                  span(v-if="config.state.min_length == config.state.max_length") exactly {{ config.state.min_length }} chars
+                  span(v-else) between {{ config.state.min_length }} and {{ config.state.max_length }} chars
               .row
                 .col-12.col-sm-3.col-label
                   h5 Status
@@ -49,7 +50,6 @@
                   //
                 .col-12.col-sm-4
                   button(@click="generate" :disabled="status !== 0") Generate
-                  //button(@click="single") Single
                   button(@click="reset" :disabled="status !== 0") Reset
             section#output
               .row
@@ -58,7 +58,7 @@
                     h5 Results
                     .output-wrapper
                       .friendly(v-if="!status && !output.length")
-                        span Generate Names
+                        span Nothing generated yet
                       .output-list(v-else)
                         .output-item(v-for="(o, index) in getOutput" :key="index")
                           span.output-text {{ o ? o : '...' }}
@@ -96,13 +96,39 @@ export default Vue.extend({
           max_length: 12,
           cicles: 8,
         },
-        state: {},
-        query: {},
+        state: {
+          input: '',
+          temperature: 0,
+          min_length: 0,
+          max_length: 0,
+          cicles: 0,
+          race: '',
+          gender: '',
+        },
+        query: {
+          input: '',
+          temperature: 0,
+          min_length: 0,
+          max_length: 0,
+          cicles: 0,
+          race: '',
+          gender: '',
+        },
       },
+      race: {
+        human: {
+          name: 'human',
+          model: 'yob1900',
+          gender: {
+            male: 'male',
+            female: 'female',
+          }
+        }
+      }
     }
   },
   mounted () {
-    this.config.state = this.config.init;
+    this.copyConfig('init', 'state');
     //console.log('ml5 version:', ml5.version);
     this.loadModel('yob1900f');
   },
@@ -114,10 +140,15 @@ export default Vue.extend({
         this.status = 0;
       });
     },
+    copyConfig (from, to) {
+      for (let key of Object.keys(this.config[from])) {
+        this.config[to][key] = this.config[from][key];
+      }
+    },
     async generate () {
       this.status = 1;
 
-      this.config.query = this.config.state;
+      this.copyConfig('state', 'query');
       this.output = [];
 
       for (let c = 0; c < this.config.query.cicles; c++) {
@@ -136,16 +167,17 @@ export default Vue.extend({
       let running = true;
       const chars = 'abcdefghijklmnopqrstuvwxyz';
 
-      if (this.input) {
+      if (this.config.query.input.length >= feed_length) {
         current = this.config.query.input.slice(-1).toUpperCase();
         //console.log('input char', current);
+        output += this.config.query.input;
       } else {
         current = chars.charAt(Math.floor(Math.random() * chars.length)).toUpperCase();
         //console.log('random input char', current);
+        output += current;
       }
 
       await this.rnn.feed(current);
-      output += current;
 
       while (running) {
         const next = await this.predict();
@@ -185,8 +217,8 @@ export default Vue.extend({
       this.status = 1;
       this.rnn.reset();
       this.output = [];
-      this.config.state = this.config.init;
-      this.config.query = this.config.state;
+      this.copyConfig('init', 'state');
+      this.copyConfig('state', 'query');
       console.log('model resetted');
       this.status = 0;
     }
