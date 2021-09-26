@@ -262,7 +262,7 @@ export default Vue.extend({
   //position: relative
   overflow: hidden auto
   #bg
-    background: url('/bg.jpg') no-repeat center
+    background: url('~assets/media/bg.jpg') no-repeat center
     background-size: cover
     filter: grayscale(0.8) brightness(0.8) contrast(1.6)
     box-shadow: 0 0 min(10vh, 10vw) rgba(0, 0, 0, 0.5) inset
@@ -286,7 +286,7 @@ export default Vue.extend({
         border: 0.5rem ridge rgba(0, 0, 0, 0.9)
         border-radius: 0.5rem
         .card-bg
-          background: url('/paper.jpg') no-repeat top
+          background: url('~assets/media/paper.jpg') no-repeat top
           background-size: cover
           //filter: grayscale(1) brightness(1) invert(1)
           filter: grayscale(0.75) brightness(0.25)
