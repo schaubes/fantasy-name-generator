@@ -24,6 +24,7 @@ export default {
   ],
 
   router: {
+    base: '/fantasy-name-generator/',
     linkActiveClass: '',
     linkExactActiveClass: 'active',
   },
