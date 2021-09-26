@@ -33,14 +33,24 @@
                   input#inputMaxLength(type="number" name="inputMaxLength" placeholder="Max Length" :min="config.state.min_length" max="15" step="1"  v-model="config.state.max_length")
                 .col-12.col-sm-5.col-info
                   span [{{ config.state.min_length }}, {{ config.state.max_length }}]
+              .row
+                .col-12.col-sm-3.col-label
+                  h5 Status
+                .col-12.col-sm-4.col-input
+                  .status(v-if="status == 0")
+                    .status-sign.status-sign-idle
+                    span idle
+                  .status(v-else)
+                    .status-sign.status-sign-working
+                    span working
             section#buttons
               .row
                 .col-0.col-sm-3
                   //
                 .col-12.col-sm-4
-                  button(@click="generate") Generate
+                  button(@click="generate" :disabled="status !== 0") Generate
                   //button(@click="single") Single
-                  button(@click="reset") Reset
+                  button(@click="reset" :disabled="status !== 0") Reset
             section#output
               .row
                 .col-12.col-md-6
@@ -263,6 +273,20 @@ export default Vue.extend({
                   margin: 0 0.5rem 0 0
               .col-info
                 color: #B2B2B2
+            .status
+              display: flex
+              flex-direction: row
+              align-items: center
+              .status-sign
+                height: 1rem
+                width: 1rem
+                margin: 0 0.25rem
+                border-radius: 50%
+                box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.4) inset
+                &.status-sign-idle
+                  background-color: var(--bs-success)
+                &.status-sign-working
+                  background-color: var(--bs-warning)
           section#buttons
             padding: 1rem 0
           section#output
