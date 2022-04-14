@@ -81,7 +81,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 export default Vue.extend({
   head: {
     script: [
-      { src: 'https://unpkg.com/ml5@0.6.1/dist/ml5.min.js', type: 'text/javascript' },
+      { src: 'https://unpkg.com/ml5@0.12.1/dist/ml5.min.js', type: 'text/javascript' },
     ]
   },
   data () {
